@@ -1,10 +1,13 @@
 ﻿using System;
+using NLog;
 using OpenQA.Selenium;
 
 namespace ZdravoByAutomation.Steps
 {
     class Steps
     {
+        private Logger logger = LogManager.GetCurrentClassLogger();
+
         IWebDriver driver;
 
         public void InitBrowser()
@@ -34,22 +37,36 @@ namespace ZdravoByAutomation.Steps
             Console.WriteLine(test.Equals(username));
             return test.Equals(username);
         }
-        /*
-        public bool CreateNewRepository(string repositoryName, string repositoryDescription)
-        {
-            Pages.MainPage mainPage = new Pages.MainPage(driver);
-            mainPage.ClickOnCreateNewRepositoryButton();
-            Pages.CreateNewRepositoryPage createNewRepositoryPage = new Pages.CreateNewRepositoryPage(driver);
-            string expectedRepoName = createNewRepositoryPage.CreateNewRepository(repositoryName, repositoryDescription);
 
-            return expectedRepoName.Equals(createNewRepositoryPage.GetCurrentRepositoryName());
+        public bool CreateExamination()
+        {
+            Pages.ExaminationPage examinationPage = new Pages.ExaminationPage(driver);
+            examinationPage.OpenPage();
+            System.Threading.Thread.Sleep(3000);
+            string surveyId = examinationPage.CreateExamination();
+
+            logger.Info("Examination id is" + surveyId);
+
+            if (examinationPage.isExists(surveyId))
+            {
+                //examinationPage.RemoveExamination();
+                return true;
+            }
+            return false;
+        }
+        
+        public bool ChangeUserRefion()
+        {
+            Pages.UserProfilePage userProfile = new Pages.UserProfilePage(driver);
+            userProfile.ChangeRegion();
+            return userProfile.isCorrectRegion();
         }
 
-        public bool CurrentRepositoryIsEmpty()
+        public bool HideUserRegion()
         {
-            Pages.CreateNewRepositoryPage createNewRepositoryPage = new Pages.CreateNewRepositoryPage(driver);
-            return createNewRepositoryPage.IsCurrentRepositoryEmpty();
+            Pages.UserProfilePage userProfile = new Pages.UserProfilePage(driver);
+            userProfile.HideRegion();
+            return userProfile.IsRegionHidden();
         }
-        */
     }
 }

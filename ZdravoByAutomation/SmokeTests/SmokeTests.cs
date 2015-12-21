@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.IO;
 using NLog;
 using NUnit.Framework;
+using System.Threading;
 
 namespace ZdravoByAutomation.SmokeTests
 {
@@ -21,6 +22,7 @@ namespace ZdravoByAutomation.SmokeTests
             steps.InitBrowser();
         }
 
+        
         [TearDown]
         public void Cleanup()
         {
@@ -31,21 +33,35 @@ namespace ZdravoByAutomation.SmokeTests
         public void OneCanLogin()
         {
             steps.LoginSystem(USERNAME, PASSWORD);
-            //Console.WriteLine("Time {0}", DateTime.Now);
             logger.Info("Logged in successfully");
-            Assert.True(true);
-            System.Threading.Thread.Sleep(1000);
             Assert.True(steps.IsLoggedIn(USERNAME));
 
         }
-        /*
+
         [Test]
-        public void OneCanCreateProject()
+        public void CreateExamination()
         {
-            steps.LoginGithub(USERNAME, PASSWORD);
-            Assert.IsTrue(steps.CreateNewRepository("testRepo", "auto-generated test repo"));
-            Assert.IsTrue(steps.CurrentRepositoryIsEmpty());
+            steps.LoginSystem(USERNAME, PASSWORD);
+            logger.Info("Logged in successfully");
+
+            Assert.True(steps.CreateExamination());
         }
-         */
+
+        [Test]
+        public void ChangeRegion()
+        {
+            steps.LoginSystem(USERNAME, PASSWORD);
+            logger.Info("Logged in successfully");
+            Assert.True(steps.ChangeUserRefion());
+        }
+        
+        [Test]
+        public void HideRegion()
+        {
+            steps.LoginSystem(USERNAME, PASSWORD);
+            logger.Info("Logged in successfully");
+            Thread.Sleep(5000);
+            Assert.True(steps.HideUserRegion());
+        }
     }
 }

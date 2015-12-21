@@ -1,4 +1,5 @@
 ﻿using System;
+using NLog;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Support.PageObjects;
 
@@ -6,6 +7,8 @@ namespace ZdravoByAutomation.Pages
 {
     class MainPage
     {
+        private Logger logger = LogManager.GetCurrentClassLogger();
+
         private IWebDriver driver;
 
         private const string BASE_URL = "http://www.zdravo.by/";
