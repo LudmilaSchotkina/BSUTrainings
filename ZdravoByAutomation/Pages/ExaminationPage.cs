@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using NLog;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Support.PageObjects;
@@ -56,6 +57,7 @@ namespace ZdravoByAutomation.Pages
         public void OpenPage()
         {
             driver.Navigate().GoToUrl(EXAMINATION_URL);
+            logger.Info("Opened page: " + EXAMINATION_URL);
         }
 
         public string CreateExamination()
@@ -63,10 +65,14 @@ namespace ZdravoByAutomation.Pages
             planType.Click();
             examinationType.Click();
             chooseButton.Click();
+            Thread.Sleep(3000);
             examinationType.Click();
             createExaminationButton.Click();
+            logger.Info("Examination was created successfully");
+            Thread.Sleep(3000);
             getExaminationButton.Click();
             inputName.SendKeys(USERNAME);
+            Thread.Sleep(3000);
             submitButton.Click();
 
             return surveyElement.Text; 
@@ -76,6 +82,7 @@ namespace ZdravoByAutomation.Pages
         {
             driver.Navigate().GoToUrl(BASE_URL);
             var id = surveyId.Split()[2];
+            Thread.Sleep(3000);
             if (driver.PageSource.Contains(id))
                 return true;
             return false;

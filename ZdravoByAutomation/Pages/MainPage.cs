@@ -43,8 +43,9 @@ namespace ZdravoByAutomation.Pages
         public void OpenPage()
         {
             driver.Navigate().GoToUrl(BASE_URL);
-            //Console.WriteLine("Login Page opened");
+            logger.Info("Opened page: " + BASE_URL);
         }
+
         public void Login(string username, string password)
         {
             showLoginForm.Click();
@@ -57,6 +58,7 @@ namespace ZdravoByAutomation.Pages
         {
             linkLoggedInUser.Click();
             linkSettings.Click();
+            logger.Info("You're logged is as '" + loggedInUser.Text + "'");
             return loggedInUser.Text;
         }
     }

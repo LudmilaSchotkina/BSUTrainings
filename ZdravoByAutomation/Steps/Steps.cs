@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using NLog;
 using OpenQA.Selenium;
 
@@ -24,17 +25,16 @@ namespace ZdravoByAutomation.Steps
         {
             Pages.MainPage loginPage = new Pages.MainPage(driver);
             loginPage.OpenPage();
+            logger.Info("Page loaded");
             loginPage.Login(username, password);
-           // Console.WriteLine("Logged in");
+            logger.Info("Logged in successfully");
         }
 
         public bool IsLoggedIn(string username)
         {
             Pages.MainPage loginPage = new Pages.MainPage(driver);
             string test = loginPage.GetLoggedInUserName().Trim().ToLower();
-            Console.WriteLine(test);
-            Console.WriteLine(username);
-            Console.WriteLine(test.Equals(username));
+            logger.Info("Is logged in successfully: " + test.Equals(username));
             return test.Equals(username);
         }
 
@@ -42,31 +42,44 @@ namespace ZdravoByAutomation.Steps
         {
             Pages.ExaminationPage examinationPage = new Pages.ExaminationPage(driver);
             examinationPage.OpenPage();
-            System.Threading.Thread.Sleep(3000);
+            logger.Info("Page loaded");
+            Thread.Sleep(3000);
             string surveyId = examinationPage.CreateExamination();
-
-            logger.Info("Examination id is" + surveyId);
+            logger.Info("Examination Id is " + surveyId);
 
             if (examinationPage.isExists(surveyId))
-            {
-                //examinationPage.RemoveExamination();
                 return true;
-            }
             return false;
         }
         
-        public bool ChangeUserRefion()
+        public bool ChangeUserRegion()
         {
             Pages.UserProfilePage userProfile = new Pages.UserProfilePage(driver);
             userProfile.ChangeRegion();
-            return userProfile.isCorrectRegion();
+            logger.Info("Region was changed");
+            return userProfile.IsCorrectRegion();
         }
 
         public bool HideUserRegion()
         {
             Pages.UserProfilePage userProfile = new Pages.UserProfilePage(driver);
             userProfile.HideRegion();
+            logger.Info("Region was hidden");
             return userProfile.IsRegionHidden();
+        }
+
+        public bool ShowUserRegion()
+        {
+            Pages.UserProfilePage userProfile = new Pages.UserProfilePage(driver);
+            userProfile.ShowRegion();
+            logger.Info("Region was shown");
+            return !userProfile.IsRegionHidden();
+        }
+
+        public bool CalculateBmi(string height, string weight)
+        {
+            Pages.CalculatorPage bmiPage = new Pages.CalculatorPage(driver);
+            return bmiPage.CalculateBmi(height, weight);
         }
     }
 }
